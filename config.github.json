@@ -1,0 +1,21 @@
+{
+  "title": "今日信号",
+  "focus": "AI, technology, startups, science, business, China, United States, and major world events",
+  "lookback_hours": 30,
+  "max_events": 10,
+  "openai_model": "gpt-4.1-mini",
+  "youtube_sources": [
+    {
+      "name": "TED",
+      "type": "channel_id",
+      "value": "UCAuUUnT6oDeKwE6v1NGQxug",
+      "limit": 6
+    },
+    {
+      "name": "Google DeepMind",
+      "type": "channel_id",
+      "value": "UCP7jMXSY2xbc3KCAE0MHQ-A",
+      "limit": 6
+    }
+  ]
+}

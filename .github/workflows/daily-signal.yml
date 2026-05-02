@@ -1,0 +1,44 @@
+name: Daily Signal
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 08:00 Asia/Shanghai every day.
+    - cron: "0 0 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  build-brief:
+    runs-on: ubuntu-latest
+    env:
+      TZ: Asia/Shanghai
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run tests
+        run: python -m unittest discover -s tests
+
+      - name: Generate daily brief
+        run: python daily_signal.py --config config.github.json --output-dir briefs
+
+      - name: Commit generated brief
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add briefs .daily-signal/seen.sqlite3
+          if git diff --cached --quiet; then
+            echo "No new brief changes to commit."
+          else
+            git commit -m "chore: add daily signal brief"
+            git push
+          fi
